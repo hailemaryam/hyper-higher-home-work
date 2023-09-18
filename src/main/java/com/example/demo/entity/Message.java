@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -16,4 +17,7 @@ public class Message {
     @ManyToOne
     private User user;
     @ManyToOne
-    private ChatRoom chatRoom;}
+    private ChatRoom chatRoom;
+    private Instant createdAt;
+    private Instant updatedAt;
+}

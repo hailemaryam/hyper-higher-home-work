@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -60,6 +61,8 @@ public class ChatRoomService {
         message.setFilePath(filePath);
         message.setUser(user);
         message.setChatRoom(chatroom);
+        message.setCreatedAt(Instant.now());
+        message.setUpdatedAt(Instant.now());
         return messageRepository.save(message);
     }
 

@@ -11,8 +11,9 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
+    private String type; // TEXT, VIDEO, ATTACHMENT
+    private String filePath;
     @ManyToOne
-    private User sender;
+    private User user;
     @ManyToOne
-    private ChatRoom chatRoom;
-}
+    private ChatRoom chatRoom;}

@@ -43,4 +43,38 @@ public class ChatRoomService {
         chatroom.setMembers(members);
         return chatRoomRepository.save(chatroom);
     }
+
+    public void leaveChatroom(Long chatroomId, Long userId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatroomId).orElseThrow(() -> new RuntimeException("Chatroom not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        chatRoom.getMembers().remove(user);
+        chatRoomRepository.save(chatRoom);
+    }
+
+    public Message sendMessage(Long chatroomId, Long userId, String content, String type, String filePath) {
+        ChatRoom chatroom = chatRoomRepository.findById(chatroomId).orElseThrow(() -> new RuntimeException("Chatroom not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Message message = new Message();
+        message.setContent(content);
+        message.setType(type);
+        message.setFilePath(filePath);
+        message.setUser(user);
+        message.setChatRoom(chatroom);
+        return messageRepository.save(message);
+    }
+
+    public Message sendAttachment(Long chatroomId, Long userId, MultipartFile file) {
+        String filePath = fileStorageService.storeFile(file, "attachments/");
+        return sendMessage(chatroomId, userId, "Attachment", "ATTACHMENT", filePath);
+    }
+
+    public Message sendVideo(Long chatroomId, Long userId, MultipartFile video) {
+        String filePath = fileStorageService.storeFile(video, "video/");
+        return sendMessage(chatroomId, userId, "Video", "VIDEO", filePath);
+    }
+
+    public Message sendPicture(Long chatroomId, Long userId, MultipartFile picture) {
+        String filePath = fileStorageService.storeFile(picture, "picture/");
+        return sendMessage(chatroomId, userId, "Picture", "PICTURE", filePath);
+    }
 }

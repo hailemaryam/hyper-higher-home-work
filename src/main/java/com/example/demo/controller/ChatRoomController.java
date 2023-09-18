@@ -55,6 +55,12 @@ public class ChatRoomController {
         return ResponseEntity.ok(message);
     }
 
+    @PostMapping("/{chatroomId}/send/message")
+    public ResponseEntity<Message> sendMessage(@PathVariable Long chatroomId, @RequestParam Long userId, @RequestParam String content) {
+        Message message = chatRoomService.sendMessage(chatroomId, userId, content, null, null);
+        return ResponseEntity.ok(message);
+    }
+
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws IOException {
         Resource resource = fileStorageService.loadFileAsResource(fileName);

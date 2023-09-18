@@ -72,6 +72,9 @@ public class ChatRoomService {
     }
 
     public Message sendVideo(Long chatroomId, Long userId, MultipartFile video) {
+        if (video.getSize() < 1e+7){
+            new RuntimeException("video size is below the minimum value.");
+        }
         String filePath = fileStorageService.storeFile(video, "video/");
         return sendMessage(chatroomId, userId, "Video", "VIDEO", filePath);
     }

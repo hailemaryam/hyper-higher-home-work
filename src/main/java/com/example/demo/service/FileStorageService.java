@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class FileStorageService {
@@ -23,7 +24,7 @@ public class FileStorageService {
             Path targetLocation = Paths.get(uploadDir + subDirectory).toAbsolutePath().normalize();
             Files.createDirectories(targetLocation);
 
-            Path targetPath = targetLocation.resolve(file.getOriginalFilename());
+            Path targetPath = targetLocation.resolve(UUID.randomUUID().toString() + file.getOriginalFilename());
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
             return targetPath.toString();
@@ -32,17 +33,13 @@ public class FileStorageService {
         }
     }
 
-    public Resource loadFileAsResource(String fileName) {
-        try {
-            Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
-            if(resource.exists()) {
-                return resource;
-            } else {
-                throw new RuntimeException("File not found " + fileName);
-            }
-        } catch (MalformedURLException ex) {
-            throw new RuntimeException("File not found " + fileName, ex);
+    public Resource loadFileAsResource(String fileName) throws MalformedURLException {
+        Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
+        Resource resource = new UrlResource(filePath.toUri());
+        if(resource.exists()) {
+            return resource;
+        } else {
+            throw new RuntimeException("File not found " + fileName);
         }
     }
 }

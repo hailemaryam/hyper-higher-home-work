@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.entity.ChatRoom;
 import com.example.demo.entity.Message;
-import com.example.demo.entity.User;
+import com.example.demo.entity.ChatUser;
 import com.example.demo.repository.ChatRoomRepository;
 import com.example.demo.repository.MessageRepository;
 import com.example.demo.repository.UserRepository;
@@ -34,9 +34,9 @@ public class ChatRoomService {
     public ChatRoom createChatroom(ChatRoomDTO chatRoomDTO) {
         ChatRoom chatroom = new ChatRoom();
         chatroom.setName(chatRoomDTO.getName());
-        Set<User> members = new HashSet<>();
+        Set<ChatUser> members = new HashSet<>();
         chatRoomDTO.getMembers().forEach(memberId -> {
-            Optional<User> byId = userRepository.findById(memberId);
+            Optional<ChatUser> byId = userRepository.findById(memberId);
             if (byId.isPresent()){
                 members.add(byId.get());
             }
@@ -47,14 +47,14 @@ public class ChatRoomService {
 
     public void leaveChatroom(Long chatroomId, Long userId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatroomId).orElseThrow(() -> new RuntimeException("Chatroom not found"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        ChatUser user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         chatRoom.getMembers().remove(user);
         chatRoomRepository.save(chatRoom);
     }
 
     public Message sendMessage(Long chatroomId, Long userId, String content, String type, String filePath) {
         ChatRoom chatroom = chatRoomRepository.findById(chatroomId).orElseThrow(() -> new RuntimeException("Chatroom not found"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        ChatUser user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Message message = new Message();
         message.setContent(content);
         message.setType(type);

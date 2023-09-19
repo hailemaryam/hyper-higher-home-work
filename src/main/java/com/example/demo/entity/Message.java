@@ -15,7 +15,7 @@ public class Message {
     private String type; // TEXT, VIDEO, ATTACHMENT
     private String filePath;
     @ManyToOne
-    private User user;
+    private ChatUser user;
     @ManyToOne
     private ChatRoom chatRoom;
     private Instant createdAt;

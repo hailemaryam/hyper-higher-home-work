@@ -13,5 +13,5 @@ public class ChatRoom {
     private Long id;
     private String name;
     @ManyToMany
-    private Set<User> members;
+    private Set<ChatUser> members;
 }
